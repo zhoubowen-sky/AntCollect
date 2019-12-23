@@ -1,7 +1,31 @@
-
+// 翻页次数 好友越多页数越多
 var collectTimes = 20;
 
 mainEntrence();
+
+// 解锁
+// function unlock(){
+//     if(!device.isScreenOn()){
+//         // 屏幕没有亮 开始解锁
+//         device.wakeUp();
+//         toast("屏幕已经解锁");
+//         sleep(1500);
+//         // 屏幕上划解锁
+//         swipe(500, 0, 500, 1900, 2000);
+//         sleep(100);
+//     }
+// }
+
+// 设置按键监听 当脚本执行时候按音量减 退出脚本
+function registEvent() {
+    //启用按键监听
+    events.observeKey();
+    //监听音量上键按下
+    events.onKeyDown("KEYCODE_VOLUME_DOWN", function(event){
+        toast("脚本手动退出");
+        exit();
+    });
+}
 
 // 获取权限和设置参数
 function prepareThings() {
@@ -199,6 +223,8 @@ function openAlipay() {
 
 //程序主入口
 function mainEntrence() {
+    // 注册按键监听
+    // registEvent();
     // 前置准备操作
     prepareThings();
     // 打开支付宝APP
