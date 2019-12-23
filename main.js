@@ -31,6 +31,7 @@ function getCaptureImg() {
  */
 function enterMyMainPage() {
 
+    click("蚂蚁森林");
     sleep(2000);
 
     //收自己能量
