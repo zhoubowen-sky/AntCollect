@@ -1,0 +1,10 @@
+{
+    "name": "收集蚂蚁森林能量",
+    "main": "main.js",
+    "ignore": [
+        "build"
+    ],
+    "packageName": "vip.zhoubowen.antcollect",
+    "versionName": "1.0.0",
+    "versionCode": 1
+}
