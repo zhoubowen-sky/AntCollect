@@ -1,8 +1,10 @@
-var collectTimes = 20;
+var collectTimes = 15;
+
 mainEntrence();
 
 // 获取权限和设置参数
 function prepareThings() {
+    setScreenMetrics(1080, 2340);
     //请求截图
     if (!requestScreenCapture()) {
         toast("请求截图失败,脚本退出");
@@ -28,8 +30,8 @@ function getCaptureImg() {
  * 从支付宝主页进入蚂蚁森林我的主页
  */
 function enterMyMainPage() {
-    click("蚂蚁森林");
-    sleep(1000);
+
+    sleep(2000);
 
     //收自己能量
     sleep(500);
@@ -114,7 +116,7 @@ function enterOthers() {
     click(ePoint.x, ePoint.y + 20);
     sleep(500);
 
-    //收能量
+    //收好友能量
     clickByTextDesc("克", 0);
     sleep(500);
 
@@ -140,47 +142,58 @@ function clickByTextDesc(energyType, paddingY) {
     if (descEndsWith(energyType).exists()) {
         descEndsWith(energyType).find().forEach(function (pos) {
             var posb = pos.bounds();
+
+            click(posb.centerX(), posb.centerY());
+
             if (posb.centerX() < 0 || posb.centerY() - paddingY < 0) {
                 return false;
             }
-            //toastLog(pos.id());
+
             var str = pos.id();
             if (str != null) {
                 if (str.search("search") == -1) {
                     click(posb.centerX(), posb.centerY() - paddingY);
-                    //toastLog("get it 1");
                     clicked = true;
                 }
             } else {
                 click(posb.centerX(), posb.centerY() - paddingY);
-                //toastLog("get it 2");
                 clicked = true;
             }
             sleep(100);
         });
+    } else {
+        toast("没有找到符合条件的能量球1");
+        sleep(2000);
     }
 
     if (textEndsWith(energyType).exists() && clicked == false) {
         textEndsWith(energyType).find().forEach(function (pos) {
             var posb = pos.bounds();
+            
+
+            click(posb.centerX(), posb.centerY());
+
             if (posb.centerX() < 0 || posb.centerY() - paddingY < 0) {
                 return false;
             }
-            //toastLog(pos.id());
+
             var str = pos.id();
             if (str != null) {
                 if (str.search("search") == -1) {
                     click(posb.centerX(), posb.centerY() - paddingY);
-                    //toastLog("get it 3"); 
+
                     clicked = true;
                 }
             } else {
                 click(posb.centerX(), posb.centerY() - paddingY);
-                //toastLog("get it 4");
+
                 clicked = true;
             }
             sleep(100);
         });
+    } else {
+        toast("没有找到符合条件的能量球2");
+        sleep(2000);
     }
 
     return clicked;
