@@ -1,16 +1,17 @@
-var collectTimes = 15;
+
+var collectTimes = 20;
 
 mainEntrence();
 
 // 获取权限和设置参数
 function prepareThings() {
     setScreenMetrics(1080, 2340);
-    //请求截图
+    // 请求截图权限
     if (!requestScreenCapture()) {
         toast("请求截图失败,脚本退出");
         exit();
     }
-    toast("请求截图成功");
+    toast("请求截图权限成功");
 }
 
 // 截图
@@ -26,24 +27,18 @@ function getCaptureImg() {
     }
 }
 
-/**
- * 从支付宝主页进入蚂蚁森林我的主页
- */
+// 从支付宝主页进入蚂蚁森林我的主页
 function enterMyMainPage() {
-
     click("蚂蚁森林");
-    sleep(2000);
-
-    //收自己能量
-    sleep(500);
+    sleep(1500);
+    // 收自己能量
     clickByTextDesc("克", 0);
-    toastLog("自己能量收集完成");
+    toast("自己能量收集完成");
     sleep(500);
     return true;
 }
-/**
- * 进入排行榜
- */
+
+// 进入总排行榜
 function enterRank() {
     toast("进入排行榜");
     click("总排行榜");
@@ -51,12 +46,11 @@ function enterRank() {
 
     toast("查看更多好友");
     click("查看更多好友");
-    sleep(1000);
+    sleep(1500);
     return true;
 }
-/**
- * 从排行榜获取可收集好友的点击位置
- */
+
+// 从排行榜获取可收集好友的点击位置
 function getHasEnergyfriend(type) {
     var img = getCaptureImg();
     var p = null;
@@ -75,19 +69,15 @@ function getHasEnergyfriend(type) {
     }
 }
 
-/**
- * 在排行榜页面,循环查找可收集好友
- */
+// 在排行榜页面,循环查找可收集好友
 function enterOthers() {
     var i = 1;
     var ePoint = getHasEnergyfriend(1);
 
-    //确保当前操作是在排行榜界面
-    //不断滑动，查找好友
+    // 需要确保当前操作是在排行榜界面
+    // 不断滑动，查找好友
     while (ePoint == null) {
-        // 判断当前是否在排行榜页面
-        // if(textContains("周排行榜").exists() || textContains("总排行榜").exists()){
-
+        // TODO 需要判断当前是否在排行榜页面
         swipe(520, 1800, 520, 300, 500);
         sleep(100);
         ePoint = getHasEnergyfriend(1);
@@ -106,14 +96,10 @@ function enterOthers() {
             toast("程序可能出错,连续" + i + "次未检测到可收集好友");
             return false;
         }
-        // }else{
-        //     toast("当前不在排行榜页面");
-        //     sleep(1000);
-        // }
     }
 
     //找到好友
-    //进入好友页面,10次尝试
+    //进入好友页面
     click(ePoint.x, ePoint.y + 20);
     sleep(500);
 
@@ -134,10 +120,9 @@ function enterOthers() {
     }
     //返回排行榜成功，继续
     enterOthers();
-
 }
 
-
+// 点击空间方法
 function clickByTextDesc(energyType, paddingY) {
     var clicked = false;
     if (descEndsWith(energyType).exists()) {
@@ -170,10 +155,7 @@ function clickByTextDesc(energyType, paddingY) {
     if (textEndsWith(energyType).exists() && clicked == false) {
         textEndsWith(energyType).find().forEach(function (pos) {
             var posb = pos.bounds();
-            
-
             click(posb.centerX(), posb.centerY());
-
             if (posb.centerX() < 0 || posb.centerY() - paddingY < 0) {
                 return false;
             }
@@ -182,27 +164,22 @@ function clickByTextDesc(energyType, paddingY) {
             if (str != null) {
                 if (str.search("search") == -1) {
                     click(posb.centerX(), posb.centerY() - paddingY);
-
                     clicked = true;
                 }
             } else {
                 click(posb.centerX(), posb.centerY() - paddingY);
-
                 clicked = true;
             }
-            sleep(100);
+            sleep(300);
         });
     } else {
         toast("没有找到符合条件的能量球2");
-        sleep(2000);
+        sleep(1500);
     }
-
     return clicked;
 }
 
-/**
- * 结束后返回主页面
- */
+// 结束后返回主页面
 function whenComplete() {
     toastLog("结束");
     back();
@@ -210,24 +187,25 @@ function whenComplete() {
     back();
 }
 
-
+// 打开支付宝APP
 function openAlipay() {
     launchApp("支付宝");
-    toastLog("等待支付宝启动");
+    toast("等待支付宝启动");
     sleep(1000);
+    // 打开首页
+    click("首页");
     return true;
 }
 
 //程序主入口
 function mainEntrence() {
-    //前置操作
+    // 前置准备操作
     prepareThings();
-
-    //打开支付宝
+    // 打开支付宝APP
     openAlipay();
-    //进入蚂蚁森林主页,收集自己的能量
+    // 进入蚂蚁森林主页,收集自己的能量
     enterMyMainPage();
-    //进入排行榜
+    // 进入排行榜
     if (enterRank()) {
         //进入好友主页，收好友能量
         enterOthers();
