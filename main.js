@@ -1,5 +1,5 @@
 // 翻页次数 好友越多页数越多
-var collectTimes = 20;
+var collectTimes = 5;
 var sleepTimes = 1000;
 mainEntrence();
 
@@ -44,11 +44,12 @@ function getCaptureImg() {
 // 从支付宝主页进入蚂蚁森林我的主页
 function enterMyMainPage() {
     click("蚂蚁森林");
-    sleep(2*sleepTimes);
+    toast("开始收集自己能量");
+    sleep(3*sleepTimes);
     // 收自己能量
     clickByTextDesc("克", 0);
     toast("自己能量收集完成");
-    sleep(0.5*sleepTimes);
+    sleep(sleepTimes);
     return true;
 }
 
@@ -75,7 +76,7 @@ function getHasEnergyfriend(type) {
         });
     }
     if (p != null) {
-        toast("找到好友");
+        toast("找到有能量可以偷的好友");
         return p;
     } else {
         toast("此页没有找到可收能量的好友");
@@ -92,7 +93,7 @@ function enterOthers() {
     while (ePoint == null) {
         // TODO 需要判断当前是否在排行榜页面
         swipe(520, 1800, 520, 300, 500);
-        sleep(0.5*sleepTimes);
+        sleep(0.8*sleepTimes);
         ePoint = getHasEnergyfriend(1);
 
         i++;
@@ -104,7 +105,7 @@ function enterOthers() {
             }
         }
 
-        //如果连续 collectTimes 次都未检测到可收集好友,无论如何停止查找(由于程序控制了在排行榜界面,且判断了结束标记,基本已经不存在这种情况了)
+        //如果连续 x 次都未检测到可收集好友,无论如何停止查找(由于程序控制了在排行榜界面,且判断了结束标记,基本已经不存在这种情况了)
         if (i > collectTimes) {
             toast("程序可能出错,连续" + i + "次未检测到可收集好友");
             return false;
@@ -160,7 +161,7 @@ function clickByTextDesc(energyType, paddingY) {
             sleep(0.1*sleepTimes);
         });
     } else {
-        toast("没有找到符合条件的能量球1");
+        // toast("没有找到符合条件的能量球1");
         sleep(1.5*sleepTimes);
     }
 
@@ -185,7 +186,7 @@ function clickByTextDesc(energyType, paddingY) {
             sleep(0.5*sleepTimes);
         });
     } else {
-        toast("没有找到符合条件的能量球2");
+        // toast("没有找到符合条件的能量球2");
         sleep(1.5*sleepTimes);
     }
     return clicked;
@@ -203,9 +204,9 @@ function whenComplete() {
 function openAlipay() {
     launchApp("支付宝");
     toast("等待支付宝启动");
-    sleep(sleepTimes);
     // 打开首页
     click("首页");
+    sleep(2*sleepTimes);
     return true;
 }
 
