@@ -1,20 +1,7 @@
 // 翻页次数 好友越多页数越多
 var collectTimes = 20;
-
+var sleepTimes = 1000;
 mainEntrence();
-
-// 解锁
-// function unlock(){
-//     if(!device.isScreenOn()){
-//         // 屏幕没有亮 开始解锁
-//         device.wakeUp();
-//         toast("屏幕已经解锁");
-//         sleep(1500);
-//         // 屏幕上划解锁
-//         swipe(500, 0, 500, 1900, 2000);
-//         sleep(100);
-//     }
-// }
 
 // 设置按键监听 当脚本执行时候按音量减 退出脚本
 function registEvent() {
@@ -29,24 +16,27 @@ function registEvent() {
 
 // 获取权限和设置参数
 function prepareThings() {
+    // 设定屏幕分辨率
     setScreenMetrics(1080, 2340);
     // 请求截图权限
     if (!requestScreenCapture()) {
-        toast("请求截图失败,脚本退出");
+        toast("请求截图失败，脚本退出");
         exit();
     }
     toast("请求截图权限成功");
+    sleep(sleepTimes);
 }
 
 // 截图
 function getCaptureImg() {
-    sleep(500);
+    sleep(0.5*sleepTimes);
     var img0 = captureScreen();
-    sleep(100);
+    sleep(0.1*sleepTimes);
     if (img0 == null || typeof (img0) == "undifined") {
-        toastLog("截图失败,脚本退出");
+        toastLog("截图失败，脚本退出");
         exit();
     } else {
+        sleep(0.1*sleepTimes);
         return img0;
     }
 }
@@ -54,11 +44,11 @@ function getCaptureImg() {
 // 从支付宝主页进入蚂蚁森林我的主页
 function enterMyMainPage() {
     click("蚂蚁森林");
-    sleep(1500);
+    sleep(2*sleepTimes);
     // 收自己能量
     clickByTextDesc("克", 0);
     toast("自己能量收集完成");
-    sleep(500);
+    sleep(0.5*sleepTimes);
     return true;
 }
 
@@ -66,11 +56,11 @@ function enterMyMainPage() {
 function enterRank() {
     toast("进入排行榜");
     click("总排行榜");
-    sleep(1500);
+    sleep(sleepTimes);
 
     toast("查看更多好友");
     click("查看更多好友");
-    sleep(1500);
+    sleep(sleepTimes);
     return true;
 }
 
@@ -97,16 +87,15 @@ function getHasEnergyfriend(type) {
 function enterOthers() {
     var i = 1;
     var ePoint = getHasEnergyfriend(1);
-
-    // 需要确保当前操作是在排行榜界面
-    // 不断滑动，查找好友
+    // TODO 需要确保当前操作是在排行榜界面
+    // 不断滑动屏幕，查找好友
     while (ePoint == null) {
         // TODO 需要判断当前是否在排行榜页面
         swipe(520, 1800, 520, 300, 500);
-        sleep(100);
+        sleep(0.5*sleepTimes);
         ePoint = getHasEnergyfriend(1);
-        i++;
 
+        i++;
         //如果检测到结尾，同时也没有可收能量的好友，那么结束收取
         if (textEndsWith("没有更多了").exists() || descEndsWith("没有更多了").exists()) {
             toast("当前已经到最后一页了");
@@ -122,16 +111,15 @@ function enterOthers() {
         }
     }
 
-    //找到好友
-    //进入好友页面
+    // 找到好友,进入好友页面
     click(ePoint.x, ePoint.y + 20);
-    sleep(500);
+    sleep(sleepTimes);
 
-    //收好友能量
+    // 收好友能量
     clickByTextDesc("克", 0);
-    sleep(500);
+    sleep(0.5*sleepTimes);
 
-    //等待返回好友排行榜
+    // 等待返回好友排行榜
     back();
     var j = 0;
     if (!textEndsWith("周排行榜").exists() && !descEndsWith("周排行榜").exists() && j <= 10) {
@@ -142,7 +130,7 @@ function enterOthers() {
         toastLog("返回排行榜失败");
         return false;
     }
-    //返回排行榜成功，继续
+    // 返回排行榜成功，继续
     enterOthers();
 }
 
@@ -169,11 +157,11 @@ function clickByTextDesc(energyType, paddingY) {
                 click(posb.centerX(), posb.centerY() - paddingY);
                 clicked = true;
             }
-            sleep(100);
+            sleep(0.1*sleepTimes);
         });
     } else {
         toast("没有找到符合条件的能量球1");
-        sleep(2000);
+        sleep(1.5*sleepTimes);
     }
 
     if (textEndsWith(energyType).exists() && clicked == false) {
@@ -194,11 +182,11 @@ function clickByTextDesc(energyType, paddingY) {
                 click(posb.centerX(), posb.centerY() - paddingY);
                 clicked = true;
             }
-            sleep(300);
+            sleep(0.5*sleepTimes);
         });
     } else {
         toast("没有找到符合条件的能量球2");
-        sleep(1500);
+        sleep(1.5*sleepTimes);
     }
     return clicked;
 }
@@ -207,7 +195,7 @@ function clickByTextDesc(energyType, paddingY) {
 function whenComplete() {
     toastLog("结束");
     back();
-    sleep(1500);
+    sleep(1.5*sleepTimes);
     back();
 }
 
@@ -215,7 +203,7 @@ function whenComplete() {
 function openAlipay() {
     launchApp("支付宝");
     toast("等待支付宝启动");
-    sleep(1000);
+    sleep(sleepTimes);
     // 打开首页
     click("首页");
     return true;
