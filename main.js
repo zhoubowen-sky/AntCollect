@@ -1,18 +1,7 @@
 // 翻页次数 好友越多页数越多
-var collectTimes = 5;
-var sleepTimes = 1000;
+var collectTimes = 10;
+var sleepTimes = 1100;
 mainEntrence();
-
-// 设置按键监听 当脚本执行时候按音量减 退出脚本
-function registEvent() {
-    //启用按键监听
-    events.observeKey();
-    //监听音量上键按下
-    events.onKeyDown("KEYCODE_VOLUME_DOWN", function(event){
-        toast("脚本手动退出");
-        exit();
-    });
-}
 
 // 获取权限和设置参数
 function prepareThings() {
@@ -135,7 +124,7 @@ function enterOthers() {
     enterOthers();
 }
 
-// 点击空间方法
+// 点击控件方法
 function clickByTextDesc(energyType, paddingY) {
     var clicked = false;
     if (descEndsWith(energyType).exists()) {
@@ -160,9 +149,6 @@ function clickByTextDesc(energyType, paddingY) {
             }
             sleep(0.1*sleepTimes);
         });
-    } else {
-        // toast("没有找到符合条件的能量球1");
-        sleep(1.5*sleepTimes);
     }
 
     if (textEndsWith(energyType).exists() && clicked == false) {
@@ -185,16 +171,14 @@ function clickByTextDesc(energyType, paddingY) {
             }
             sleep(0.5*sleepTimes);
         });
-    } else {
-        // toast("没有找到符合条件的能量球2");
-        sleep(1.5*sleepTimes);
     }
+    
     return clicked;
 }
 
 // 结束后返回主页面
 function whenComplete() {
-    toastLog("结束");
+    toast("结束");
     back();
     sleep(1.5*sleepTimes);
     back();
@@ -212,8 +196,6 @@ function openAlipay() {
 
 //程序主入口
 function mainEntrence() {
-    // 注册按键监听
-    // registEvent();
     // 前置准备操作
     prepareThings();
     // 打开支付宝APP
