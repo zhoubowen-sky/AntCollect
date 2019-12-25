@@ -1,6 +1,8 @@
 // 翻页次数 好友越多页数越多
-var collectTimes = 10;
+var collectTimes = 20;
 var sleepTimes = 1100;
+var tryTimnes = 5; // 相关操作最多尝试的次数
+// 主入口函数
 mainEntrence();
 
 // 获取权限和设置参数
@@ -188,6 +190,7 @@ function whenComplete() {
 function openAlipay() {
     launchApp("支付宝");
     toast("等待支付宝启动");
+    sleep(2*sleepTimes);
     // 打开首页
     click("首页");
     sleep(2*sleepTimes);
@@ -209,5 +212,6 @@ function mainEntrence() {
     }
     //结束后返回主页面
     whenComplete();
+    sleep(sleepTimes);
     exit();
 }
